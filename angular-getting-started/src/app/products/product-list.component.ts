@@ -1,16 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { IProduct } from './product';
 
 @Component({
     selector: 'pm-products',
-    templateUrl: './product-list.component.html'
+    templateUrl: './product-list.component.html',
+    styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent {
+export class ProductListComponent implements OnInit {
     pageTitle = 'Product List?';
     imageWidth = 50;
     imageMargin = 2;
     showImage: boolean = false;
-    listFilter: string = 'cart';
-    products: any[] = [
+    private _listFilter: string = '';
+    filteredProducts: IProduct[] = [];
+    products: IProduct[] = [
         {
             "productId": 1,
             "productName": "Leaf Rake",
@@ -20,8 +23,8 @@ export class ProductListComponent {
             "price": 19.95,
             "starRating": 3.2,
             "imageUrl": "assets/images/leaf_rake.png"
-          },
-          {
+        },
+        {
             "productId": 2,
             "productName": "Garden Cart",
             "productCode": "GDN-0023",
@@ -30,10 +33,31 @@ export class ProductListComponent {
             "price": 32.99,
             "starRating": 4.2,
             "imageUrl": "assets/images/garden_cart.png"
-          }
+        }
     ];
+
+    get listFilter(): string {
+        return this._listFilter;
+    }
+    set listFilter(value: string) {
+        this._listFilter = value;
+        this.filteredProducts = this.performFilter(value);
+        console.log('set the filter:', this._listFilter);
+    }
 
     toggleImage(): void {
         this.showImage = !this.showImage;
+    }
+
+    ngOnInit(): void {
+        console.log('OnInit called');
+        this.listFilter = 'cart';
+    }
+
+    performFilter(filterBy: string): IProduct[] {
+        filterBy = filterBy.toLocaleLowerCase();
+        return this.products.filter(
+            (product: IProduct) => 
+            product.productName.toLocaleLowerCase().includes(filterBy));
     }
 }
