@@ -60,4 +60,8 @@ export class ProductListComponent implements OnInit {
             (product: IProduct) => 
             product.productName.toLocaleLowerCase().includes(filterBy));
     }
+    onRatingClicked(message: string): void {
+        console.log(message);
+        this.pageTitle = 'Product List: ' + message;
+    }
 }
