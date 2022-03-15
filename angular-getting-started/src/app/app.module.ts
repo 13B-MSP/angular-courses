@@ -11,6 +11,18 @@ import { ProductDetailComponent } from './products/product-detail.component';
 import { WelcomeComponent } from './home/welcome.component';
 import { RouterModule } from '@angular/router';
 import { ProductDetailGuard } from './products/product-detail.guard';
+import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
+import {HttpLink} from 'apollo-angular/http';
+import {ApolloClientOptions, InMemoryCache} from '@apollo/client/core';
+
+function getApolloOptions(httpLink: HttpLink) : ApolloClientOptions<any>{
+  return {
+    cache: new InMemoryCache(),
+    link: httpLink.create({
+      uri: 'http://localhost:4000/'
+    })
+  }
+}
 
 @NgModule({
   declarations: [
@@ -25,6 +37,7 @@ import { ProductDetailGuard } from './products/product-detail.guard';
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    ApolloModule,
     RouterModule.forRoot([
       { path: 'products', component: ProductListComponent },
       {
@@ -36,6 +49,13 @@ import { ProductDetailGuard } from './products/product-detail.guard';
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       { path: '**', redirectTo: 'welcome', pathMatch: 'full' }
     ])
+  ],
+  providers: [
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory: getApolloOptions,
+      deps: [HttpLink]
+    }
   ],
   bootstrap: [AppComponent]
 })
