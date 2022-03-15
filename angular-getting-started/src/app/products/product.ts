@@ -8,3 +8,7 @@ export interface IProduct {
     starRating: number;
     imageUrl: string;
 }
+
+export type Query = {
+    allProducts: IProduct[];
+}
