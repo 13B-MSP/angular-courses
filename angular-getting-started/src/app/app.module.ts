@@ -12,8 +12,8 @@ import { WelcomeComponent } from './home/welcome.component';
 import { RouterModule } from '@angular/router';
 import { ProductDetailGuard } from './products/product-detail.guard';
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
-import {HttpLink} from 'apollo-angular/http';
-import {ApolloClientOptions, InMemoryCache} from '@apollo/client/core';
+import { HttpLink } from 'apollo-angular/http';
+import { ApolloClientOptions, InMemoryCache } from '@apollo/client/core';
 
 function getApolloOptions(httpLink: HttpLink) : ApolloClientOptions<any>{
   return {
