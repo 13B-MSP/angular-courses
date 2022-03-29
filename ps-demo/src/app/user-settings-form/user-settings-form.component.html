@@ -1,9 +1,12 @@
 <div class="container">
     <h2>User Settings</h2>
-    <form #form="ngForm" ngNativeValidate>
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
         <div class="form-group">
             <label for="name">Name</label>
-            <input id="name" name="name" class="form-control" placeholder="Name" [(ngModel)] = "userSettings.name" required/>
+            <input id="name" name="name" class="form-control" placeholder="Name" [(ngModel)] = "userSettings.name" required #nameField="ngModel"
+                [class.field-error]="form.submitted && nameField.invalid"
+                (blur)="onBlur(nameField)"/>
+            <div [hidden]="!form.submitted || nameField.valid" class="alert alert-danger">Enter a name</div>
         </div>
         <div class="form-check form-group">
             <input class="form-check-input" type="checkbox" value="" id="emailOffers" name="emailOffers" [(ngModel)] = "userSettings.emailOffers">
@@ -36,15 +39,16 @@
             <label for="subscriptionType">Subscription Type</label>
             <select class="form-select" aria-label="Default select example" id="subscriptionType" name="subscriptionType" [(ngModel)] = "userSettings.subscriptionType">
                 <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option *ngFor="let type of subscriptionTypes$ | async">
+                    {{ type }}
+                </option>
             </select>
         </div>
         <div class="form-group">
             <label for="notes">Notes</label>
             <textarea name="notes" id="notes" class="forms-control" cols="30" rows="3" [(ngModel)] = "userSettings.notes"></textarea>
         </div>
+        <div [hidden]="!postError" class="alert alert-danger">{{ postErrorMessage }}</div>
         <button class="btn btn-primary">Ok</button>
     </form>
 </div>
